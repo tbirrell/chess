@@ -15,5 +15,11 @@
   "bugs": {
     "url": "https://github.com/tbirrell/chess/issues"
   },
-  "homepage": "https://github.com/tbirrell/chess#readme"
+  "homepage": "https://github.com/tbirrell/chess#readme",
+  "dependencies": {
+    "chess.js": "^0.10.2",
+    "chessboardjs": "0.0.1",
+    "express": "^4.14.0",
+    "mongodb": "^2.2.9"
+  }
 }
