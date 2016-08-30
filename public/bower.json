@@ -1,0 +1,20 @@
+{
+  "name": "chess",
+  "description": "Casual online chess game server",
+  "main": "index.js",
+  "authors": [
+    "tbirrell"
+  ],
+  "license": "ISC",
+  "homepage": "https://github.com/tbirrell/chess",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "chess.js": "jhlywa/chess.js#^0.10.2"
+  }
+}

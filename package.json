@@ -17,9 +17,9 @@
   },
   "homepage": "https://github.com/tbirrell/chess#readme",
   "dependencies": {
-    "chess.js": "^0.10.2",
-    "chessboardjs": "0.0.1",
+    "bower": "^1.7.9",
     "express": "^4.14.0",
-    "mongodb": "^2.2.9"
+    "mongodb": "^2.2.9",
+    "serve-favicon": "^2.3.0"
   }
 }
