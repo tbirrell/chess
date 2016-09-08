@@ -28,7 +28,6 @@ app.use(favicon(__dirname + '/favicon.ico'));
 
 MongoClient.connect(mongourl, function(err, db) {
   gameBoard = db.collection('gameboard');
-  player = db.collection('gameboard');
 });
 
 app.listen(port, function(){
