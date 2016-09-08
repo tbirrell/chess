@@ -72,9 +72,15 @@ app.get('/game/:gamehash', function (req, res) {
   });
 });
 
+
 /**
 * Listens to Browser
 */
-app.put('/new/:white/:black', function (req, res) {
+app.get('/game/:gamehash/findGame', function (req, res) {
+  console.log(req.params);
+  res.send('r1bqkbnr/pppp1ppp/2n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R')
+});
+
+app.put('/new/:game/:white/:black', function (req, res) {
 
 });
