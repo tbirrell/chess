@@ -3,6 +3,7 @@
  */
 var express = require('express'),
     app = express();
+var bodyParser = require('body-parser');
 var MongoClient = require('mongodb').MongoClient;
 var assert = require('assert');
 var favicon = require('serve-favicon');
@@ -25,6 +26,8 @@ var player;
  */
 app.use(express.static('public'));
 app.use(favicon(__dirname + '/favicon.ico'));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 MongoClient.connect(mongourl, function(err, db) {
   gameBoard = db.collection('gameboard');
@@ -77,9 +80,44 @@ app.get('/game/:gamehash', function (req, res) {
 */
 app.get('/game/:gamehash/findGame', function (req, res) {
   console.log(req.params);
-  res.send('r1bqkbnr/pppp1ppp/2n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R')
+  var game = req.params.gamehash.substr(0, 10);
+  gameBoard.find({
+    "gamehash": game
+  }).toArray(function(err, result){
+    console.log(result);
+    res.send(result); // return results
+  });
 });
 
-app.put('/new/:game/:white/:black', function (req, res) {
+app.post('/new/:game/:white/:black', function (req, res) {
+  gameBoard.insertOne( {
+    gamehash: req.params.game,
+    white: req.params.white,
+    black: req.params.black,
+    fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
+    lastmove: 'new',
+    status: 'new'
+  }, function(err, result) {
+    assert.equal(err, null);
+    console.log("New game inserted");
+  });
+});
 
+app.put('/game/:gamehash/update', function (req, res) {
+  var gamehash = req.params.gamehash.substr(0, 10);
+
+  //update
+  gameBoard.update( {
+    gamehash: gamehash,
+  }, {
+    $set: {
+      gamehash: gamehash,
+      fen: req.body.fen,
+      lastmove: req.body.lastmove,
+      status: req.body.status
+    }
+  }, function(err, result) {
+    assert.equal(err, null);
+    console.log("Game updated");
+  });
 });

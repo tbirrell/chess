@@ -7,10 +7,12 @@ $('#newgame').click(function(){
   //create links
   var game = createNewGame();
   var baseLink = window.location.origin + '/game/' + game.hash;
-  
+
   //show links
   $('.links#white').val(baseLink + game.playerWhite);
   $('.links#black').val(baseLink + game.playerBlack);
+
+  addToDatabase(game);
 });
 
 function createNewGame() {
@@ -29,4 +31,8 @@ function createNewGame() {
     'playerBlack': text[3]
   };
   return game;
+}
+
+function addToDatabase(game) {
+  $.post('/new/' + game.hash + '/' + game.playerWhite + '/' + game.playerBlack);
 }
