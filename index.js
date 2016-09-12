@@ -12,7 +12,7 @@ var chess = require('./public/bower_components/chess.js/chess.min.js')
 /**
  * Environment Varibles
  */
-var port = process.env.PORT || 3000;
+var port = process.env.PORT || 3700;
 var mongourl = process.env.MONGO_URL || 'mongodb://localhost:27017/chess';
 
 /**
