@@ -7,12 +7,21 @@
     <link rel="stylesheet" href="/chessboardjs/css/chessboard.css">
   </head>
   <body>
+    <button type="button" id="confirm">Confirm move</button>
+    <button type="button" id="undo">Undo move</button>
+    <div class="promotions">
+      <button type="button" class="promote-btn" value="q">Queen</button>
+      <button type="button" class="promote-btn" value="r">Rook</button>
+      <button type="button" class="promote-btn" value="b">Bishop</button>
+      <button type="button" class="promote-btn" value="n">Knight</button>
+    </div>
     <div id="board" style="width: 400px"></div>
 
     <!-- scripts -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
     <script src="/bower_components/chess.js/chess.min.js"></script>
     <script src="/chessboardjs/js/chessboard.js"></script>
+    <script src="/js/style.js"></script>
     <script src="/js/game.js"></script>
   </body>
 </html>

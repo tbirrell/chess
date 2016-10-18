@@ -1,3 +1,15 @@
 .hidden {
   display: none;
 }
+#undo,
+#confirm {
+  display: none;
+}
+
+.promotions {
+  display: none;
+}
+
+.unhide {
+  display: block !important;
+}

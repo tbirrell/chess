@@ -2,6 +2,10 @@ var chess; //logic
 var board; //board
 var game; //status
 
+var lastfen;
+var lastmove;
+var promotionMove = {};
+
 var player = {};
 
 // get game id
@@ -42,49 +46,45 @@ var onDragStart = function(source, piece, position, orientation) {
   }
 }
 var onDrop = function(source, target, peice, newPos, oldPos, orientation){
+  var move = executeMove(source, target)
+  if (move === 'snapback') return 'snapback';
+  var row = target.substr(target.length - 1);
+  if ((peice == 'wP' || peice == 'bP') && (row == 1 || row == 8)) {
+    promotionMove.from = source;
+    promotionMove.to = target;
+    console.log(row);
+    console.log('promotion needed');
+    $('.promotions').addClass('unhide');
+  } else {
+    $('#confirm').addClass('unhide');
+    $('#undo').addClass('unhide');
+  }
+
+}
+function executeMove(source, target, promotion) {
+  var promotion  = promotion || '';
   var move = chess.move({
     from: source,
     to: target,
-    promotion: 'q'
+    promotion: promotion
   });
 
   console.log(move);
 
-  if (move === null) return 'snapback'
+  if (move === null) return 'snapback';
+
+  lastmove = source + '-' + target;
 
   game = checkGameStatus();
 
-  var humanMove = move.from + '-' + move.to;
-
-  update(humanMove);
-}
-var onMouseoverSquare = function(square, piece) {
-  // get list of possible moves for this square
-  var moves = chess.moves({
-    square: square,
-    verbose: true
-  });
-
-  // exit if there are no moves available for this square
-  // exit if not your turn
-  if (chess.turn() != player.abbr) return;
-  if (moves.length === 0) return;
-
-  // highlight the square they moused over
-  greySquare(square);
-
-  // highlight the possible squares for this piece
-  for (var i = 0; i < moves.length; i++) {
-    greySquare(moves[i].to);
-  }
-}
-var onMouseoutSquare = function(square, piece) {
-  //remove grey squares
-  $('#board .square-55d63').css('background', '');
+  return chess.fen();
 }
 
 // instantiate game
 function setUpGame(fen, player, update = false) {
+  //save for undos
+  lastfen = fen;
+
   if (!update) {
     //logic
     chess = new Chess(fen);
@@ -106,17 +106,6 @@ function setUpGame(fen, player, update = false) {
     onMouseoutSquare: onMouseoutSquare
   });
 }
-
-function greySquare(square) {
-  var squareEl = $('#board .square-' + square);
-
-  var background = '#a9a9a9';
-  if (squareEl.hasClass('black-3c85d') === true) {
-    background = '#696969';
-  }
-
-  squareEl.css('background', background);
-};
 
 function checkGameStatus() {
   if (chess.in_check()) {
@@ -152,3 +141,32 @@ function update(lastmove) {
     }
   });
 }
+
+function resetPage() {
+  $('button').removeClass('unhide');
+}
+function undoMove() {
+  chess.undo();
+  board.position(lastfen);
+}
+
+function promotePeice(promoteTo) {
+  chess.undo();
+  var newfen = executeMove(promotionMove.from, promotionMove.to, promoteTo);
+  board.position(newfen);
+  $('#confirm').addClass('unhide');
+  $('#undo').addClass('unhide');
+  $('.promotions').removeClass('unhide');
+}
+
+$('.promote-btn').click(function(){
+  promotePeice($(this)[0].value);
+});
+$('#confirm').click(function(){
+  update(lastmove);
+  resetPage();
+});
+$('#undo').click(function(){
+  undoMove();
+  resetPage();
+});
